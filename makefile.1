@@ -1,0 +1,32 @@
+#CC = clang++ -std=gnu++17 -Wall
+CC = clang++ -std=gnu++20 -Wall
+#CC = g++ -std=gnu++20 -Wall
+
+SD = src/
+
+OBJ = object.o ObjectsInMotion.o main.o
+INC = ${SD}object.hpp ${SD}ObjectsInMotion.hpp
+
+
+build:	oim
+	
+oim:	${OBJ}
+	${CC} *.o `pkg-config sdl2 --libs` -o oim
+
+main.o:	${INC} ${SD}main.cpp
+	${CC} -c ${SD}main.cpp `pkg-config sdl2 --cflags`
+
+ObjectsInMotion.o:	${SD}ObjectsInMotion.hpp ${SD}ObjectsInMotion.cpp
+	${CC} -c ${SD}ObjectsInMotion.cpp `pkg-config sdl2 --cflags`
+
+object.o:	${SD}object.hpp ${SD}object.cpp
+	${CC} -c ${SD}object.cpp
+
+clean:
+	rm *.o oim
+
+
+
+
+#FLAGS = $(pkg-config sdl2 --cflags --libs)
+#gcc -Wall -std=c99 ./src/*.c  -lm -o game

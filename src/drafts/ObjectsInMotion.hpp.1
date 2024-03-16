@@ -1,0 +1,87 @@
+#pragma once
+
+
+#include<iostream>
+#include<string>
+
+#include<SFML/Graphics.hpp>
+//#include<SFML/Graphics/CircleShape.hpp>
+//#include<SFML/Graphics/RectangleShape.hpp>
+
+
+class object
+{
+	sf::Shape& shape;
+	
+	std::string name;
+	float xvel, yvel;
+	
+	public:
+		object() = default;
+		~object() = default;
+		
+			// circle
+		object(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius)
+		{
+			this->name = name;
+			
+			shape = sf::CircleShape(radius);
+			
+			shape.setPosition(float xpos, float ypos);
+			shape.setFillColor(sf::Color(R, G, B));
+			xvel = sx; yvel = sy;
+				
+		}
+			// rectangle
+		object(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float w, float h)
+		{
+			this->name = name;
+			
+			shape = sf::RectangleShape(sf::Vector2f(w, h));
+			
+			shape.setPosition(float xpos, float ypos);
+			shape.setFillColor(sf::Color(R, G, B));
+			xvel = sx; yvel = sy;
+		}
+		
+		static object createCircle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius)
+		{
+			object obj;
+			
+			obj.name = name;
+			
+			obj.shape = sf::CircleShape(radius);
+			
+			obj.shape.setPosition(float xpos, float ypos);
+			obj.shape.setFillColor(sf::Color(R, G, B));
+			obj.xvel = sx; obj.yvel = sy;
+			
+			return obj;
+		}
+		
+		static object createRectangle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float w, float h)
+		{
+			object obj;
+			
+			obj.name = name;
+			
+			obj.shape = sf::RectangleShape(sf::Vector2f(w, h));
+			
+			obj.shape.setPosition(float xpos, float ypos);
+			obj.shape.setFillColor(sf::Color(R, G, B));
+			obj.xvel = sx; obj.yvel = sy;
+		}
+		
+		void setPosition(float xpos, float ypos) {
+			shape.setPosition(float xpos, float ypos);
+		}
+		
+		void changeColor(int R, int G, int B) {
+			shape.setFillColor(sf::Color(R, G, B));
+		}
+		
+		void drawObject(sf::RenderWindow& window) {
+			window.draw(shape);
+		}
+};
+

@@ -1,0 +1,27 @@
+#CC = clang++ -std=gnu++17 -Wall
+CC = clang++ -std=gnu++20 -Wall
+#CC = g++ -std=gnu++20 -Wall
+
+SD = src/
+
+OBJ = objects.o ObjectsInMotion.o main.o
+INC = ${SD}objects.hpp ${SD}ObjectsInMotion.hpp
+
+
+build:	oim
+	
+oim:	${OBJ}
+	${CC} *.o `pkg-config sfml-graphics --libs` -o oim
+
+main.o:	${INC} ${SD}main.cpp
+	${CC} -c ${SD}main.cpp
+
+ObjectsInMotion.o:	${SD}ObjectsInMotion.hpp ${SD}ObjectsInMotion.cpp
+	${CC} -c ${SD}ObjectsInMotion.cpp
+
+objects.o:	${SD}objects.hpp ${SD}objects.cpp
+	${CC} -c ${SD}objects.cpp
+
+clean:
+	rm *.o `if [ -f oim  ]; then echo oim; fi`
+

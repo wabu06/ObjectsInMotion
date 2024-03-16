@@ -1,0 +1,10 @@
+Window 1280 700
+Circle CGreen 100 100 -3 2 0 255 0 50
+Hexagon HOrange 100 100 -5 9 255 165 0 80
+Rectangle RRed 200 200 4 4 255 0 0 50 25
+Rectangle RGrey 300 250 -2 2 100 100 100 50 100
+Rectangle RTeal 25 100 -2 -2 0 255 255 100 100
+Font assets/font/Cabin-SemiBold.otf 18 255 255 255
+Circle CBlue 200 200 2 4 0 0 255 100
+Triangle TBurgundy 200 200 2 -7 128 0 32 119
+Circle CPurple 300 300 -2 -1 255 0 255 75

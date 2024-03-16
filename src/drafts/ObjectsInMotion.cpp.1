@@ -1,0 +1,116 @@
+#include "ObjectsInMotion.hpp"
+
+
+ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
+	:
+	status(EXIT_SUCCESS), done(false), /*paused(false),*/ objects( std::vector<object>() )
+{
+	std::ifstream fin;
+			
+	//fin.open("config.txt");
+	fin.open(config_file);
+			
+	if(fin.fail()) {
+		done = true;
+		fin.close();
+		emsg = "\nERROR: File config.txt Not Found!!\n";
+		status = EXIT_FAILURE;
+		return;
+	}
+			
+	std::string setting;
+			
+	while(!fin.eof())
+	//while(fin.good())
+	{
+		fin >> setting;
+
+		if(fin.fail())
+		{
+			done = true;
+			fin.close();
+			emsg = "\nFile I/O Error!!\n";
+			status = EXIT_FAILURE;
+			return;
+		}
+		
+		if(setting == "Circle")
+		{
+			std::string name;
+	
+			float xpos, ypos;
+			float sx, sy; // speed
+			int R, G, B; // color
+			float radius;
+			
+			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
+			
+			objects.push_back( object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius) );
+		}
+		else if(setting == "Rectangle")
+		{
+			std::string name;
+	
+			float xpos, ypos;
+			float sx, sy; // speed
+			int R, G, B; // color
+			float w, h;
+			
+			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> w >> h;
+			
+			objects.push_back( object::createRectangle(name, xpos, ypos, sx, sy, R, G, B, w, h) );
+		}
+		else if(setting == "Window")
+			fin >> winWidth >> winHeight;
+		else if(setting == "Font")
+			fin >> font_file >> font_size >> fR >> fG >> fB;
+				
+		if(fin.fail())
+		{
+			done = true;
+			fin.close();
+			emsg = "\nFile I/O Error!!\n";
+			status = EXIT_FAILURE;
+			return;
+		}
+		
+		fin >> std::ws; //std::getline(fin, setting);
+	}
+			
+	fin.close();
+
+	//sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+
+	window.create(sf::VideoMode(winWidth, winHeight), "Objects In Motion");
+	//window.create(sf::VideoMode(desktop.width, desktop.height, desktop.bitsPerPixel), "Objects In Motion");
+}
+
+void ObjectsInMotionEngine::processInputs()
+{
+	sf::Event event;
+	
+	getEvent = &sf::RenderWindow::pollEvent;
+
+	//while (window.pollEvent(event))
+	while( (window.*getEvent)(event) )
+	{
+		 if(event.type == sf::Event::Closed) // window closed
+		 	done = true;
+		 else if(event.type == sf::Event::KeyPressed)
+		 {
+		 	if(event.key.code == sf::Keyboard::Key::Escape) { // quit if esc key has been pressed
+				done = true;
+				break;
+			}
+			else if(event.key.code == sf::Keyboard::Key::Space) {
+				//getEvent = paused ? &sf::RenderWindow::pollEvent : &sf::RenderWindow::waitEvent;
+				getEvent = getEvent == &sf::RenderWindow::waitEvent ? &sf::RenderWindow::pollEvent : &sf::RenderWindow::waitEvent;
+				//paused = paused ? false : true;
+			}
+		 }
+		 else if(event.type == sf::Event::Resized) { // window resized
+		 	winWidth = event.size.width;
+		 	winHeight = event.size.height;
+		 }
+	}
+}
