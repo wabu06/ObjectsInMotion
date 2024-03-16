@@ -13,7 +13,6 @@
 
 class object
 {
-	//sf::Shape& shape;
 	std::shared_ptr<sf::Shape> shape;
 	
 	std::string name;
@@ -27,12 +26,10 @@ class object
 		object() = default;
 		~object() = default;
 		
-		object(const object& obj) : shape(obj.shape), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {
-																						//this->shape.reset(obj.shape.release()); 
-																						}
-		object(const object&& obj) : shape(obj.shape), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {
-																						//this->shape.reset(obj.shape.release()); 
-																						}
+		object(const object& obj) : shape(obj.shape), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
+
+		object(const object&& obj) : shape(obj.shape), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
+		
 		object& operator=(const object& obj)
 		{
 			this->shape = obj.shape;
@@ -64,9 +61,7 @@ class object
 		static object createRectangle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float w, float h);
 		
 		void setLabel(sf::Font& font, unsigned int size, uint8_t R, uint8_t G, uint8_t B)
-		{
-			//std::cout << '\n' << G << '\n';
-			
+		{	
 			text.setFont(font);
 			text.setString(name);
 			text.setCharacterSize(size);

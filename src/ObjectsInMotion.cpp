@@ -3,12 +3,10 @@
 
 ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 	:
-	//status(EXIT_SUCCESS), done(false), /*paused(false),*/ objects( std::vector<object>() )
 	status(EXIT_SUCCESS), done(false), objects( std::unordered_map<std::string, object>() )
 {
 	std::ifstream fin;
-			
-	//fin.open("config.txt");
+
 	fin.open(config_file);
 			
 	if(fin.fail()) {
@@ -19,12 +17,11 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 		return;
 	}
 	
-	std::vector<std::string> objNames;
+	//std::vector<std::string> objNames;
 			
 	std::string setting;
 			
 	while(!fin.eof())
-	//while(fin.good())
 	{
 		fin >> setting;
 
@@ -48,9 +45,7 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 			
 			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
 			
-			objNames.push_back(name);
-			
-			//objects.push_back( object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius) );
+			//objNames.push_back(name);
 			
 			objects[name] = object::createHexagon(name, xpos, ypos, sx, sy, R, G, B, radius);
 		}
@@ -65,9 +60,7 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 			
 			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
 			
-			objNames.push_back(name);
-			
-			//objects.push_back( object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius) );
+			//objNames.push_back(name);
 			
 			objects[name] = object::createTriangle(name, xpos, ypos, sx, sy, R, G, B, radius);
 		}
@@ -82,9 +75,7 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 			
 			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
 			
-			objNames.push_back(name);
-			
-			//objects.push_back( object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius) );
+			//objNames.push_back(name);
 			
 			objects[name] = object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius);
 		}
@@ -99,9 +90,7 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 			
 			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> w >> h;
 			
-			objNames.push_back(name);
-			
-			//objects.push_back( object::createRectangle(name, xpos, ypos, sx, sy, R, G, B, w, h) );
+			//objNames.push_back(name);
 			
 			objects[name] = object::createRectangle(name, xpos, ypos, sx, sy, R, G, B, w, h);
 		}
@@ -119,12 +108,10 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 			return;
 		}
 		
-		fin >> std::ws; //std::getline(fin, setting);
+		fin >> std::ws;
 	}
 			
 	fin.close();
-	
-	//std::cout << '\n' << font_file << '\t' << font_size << '\t' << fR << '\t' << fG << '\t' << fB << '\n';
 	
 	if ( !font.loadFromFile(font_file) )
 	{
@@ -136,12 +123,10 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 	
 	for(auto& [n, o]: objects)
 		o.setLabel(font, font_size, (uint8_t)fR, (uint8_t)fG, (uint8_t)fB);
-	
-	//sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 
 	//updatePtr = &ObjectsInMotionEngine::update;
 	
-	int i = 0;
+	/* int i = 0;
 	
 	objNamesUptr = std::make_unique<char*[]>(objNames.size());
 	
@@ -149,12 +134,9 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 		objNamesUptr[i] = new char[n.size() + 1];
 		strcpy(objNamesUptr[i], n.c_str());
 		i++;
-	}
-	
-	std::cout << std::endl;
+	} */
 
 	window.create(sf::VideoMode(winWidth, winHeight), "Objects In Motion");
-	//window.create(sf::VideoMode(desktop.width, desktop.height, desktop.bitsPerPixel), "Objects In Motion");
 	
 	ImGui::SFML::Init(window);
 }
@@ -199,4 +181,37 @@ void ObjectsInMotionEngine::processInputs()
 		 	//updatePtr = &ObjectsInMotionEngine::resizeUpdate;
 		 }
 	}
+}
+
+void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
+{
+	//char** names = objNamesUptr.get();
+	
+	auto object_count = objects.size();
+		
+	int i{0};
+		
+	char* names[object_count];
+		
+	for(auto& [n, o]: objects)
+	{
+		names[i] = new char[n.size() + 1];
+		strcpy(names[i], n.c_str());
+		i++;
+	}
+		
+	static int select = 1;
+		
+	ImGui::SFML::Update(window, delta);
+
+	ImGui::Begin("Control Panel");
+		ImGui::Combo("##", &select, names, object_count);
+		bool hide = ImGui::Button("Show/Hide Selected Shape");
+	ImGui::End();
+		
+	if(hide)
+		objects[ std::string(names[select]) ].setVisible();
+		
+	for(int n = 0; n < object_count; n++)
+		delete names[n];
 }

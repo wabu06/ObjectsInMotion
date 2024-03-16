@@ -74,8 +74,6 @@ void object::moveObject(sf::Time& delta, unsigned int winWidth, unsigned int win
 	//sf::Time delta = clock.restart();
 	
 	float d30 = delta.asSeconds() * 35;
-	
-	//std::cout << delta.asSeconds() << '\n';
 
 	shape.get()->move(d30 * xvel, d30 * yvel);
 
@@ -113,8 +111,7 @@ void object::moveObject(sf::Time& delta, unsigned int winWidth, unsigned int win
 	
 	sf::Vector2f sPos = shape->getPosition();
 	
-	sf::Vector2f tPos = sPos + sf::Vector2f(xoff, yoff) - sf::Vector2f(0, tRect.height / 2); //sf::Vector2f(tRect.width / 2, 0); 
-	//sf::Vector2f tPos = sPos + sf::Vector2f(xoff, yoff) - sf::Vector2f((tRect.width / 2) * -1, tRect.height / 2);
+	sf::Vector2f tPos = sPos + sf::Vector2f(xoff, yoff) - sf::Vector2f(0, tRect.height / 2);
 	
 	text.setPosition(tPos);
 }

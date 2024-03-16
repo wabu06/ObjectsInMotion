@@ -12,12 +12,6 @@
 #include "objects.hpp"
 
 
-//#include<string>
-//#include<utility>
-
-//#include<SFML/Graphics.hpp>
-
-
 class ObjectsInMotionEngine
 {
 	std::string emsg;
@@ -25,8 +19,6 @@ class ObjectsInMotionEngine
 	int status; // shutdown status
 	
 	bool done;
-	
-	//bool paused;
 	
 	sf::Font font;
 	
@@ -36,20 +28,19 @@ class ObjectsInMotionEngine
 	
 	unsigned int oldWinWidth, oldWinHeight;
 	unsigned int winWidth, winHeight;
-	
-	//sf::RenderWindow window(sf::VideoMode(800, 600), "Objects In Motion");
+
 	sf::RenderWindow window;
+
+	//std::unique_ptr<char*[]> objNamesUptr;
 	
-	//std::vector<std::string> objNames;
-	std::unique_ptr<char*[]> objNamesUptr;
-	
+		// objects map
 	std::unordered_map<std::string, object> objects;
 	
 	bool (sf::RenderWindow::*getEvents)(sf::Event& event);
 	
 	void processInputs();
 	
-	void processImguiEvents() {}
+	//void processImguiEvents() {}
 	
 	void (ObjectsInMotionEngine::*updatePtr) (sf::Time&);
 	
@@ -69,26 +60,38 @@ class ObjectsInMotionEngine
 			o.moveObject(delta, winWidth, winHeight);
 	}
 	
-	void handleImgui(sf::Time& delta)
-	{
-		ImGui::SFML::Update(window, delta);
+	void handleImgui(sf::Time& delta);
+	/*{
+		//char** names = objNamesUptr.get();
 		
-		char** names = objNamesUptr.get();
+		auto object_count = objects.size();
 		
-		//std::cout << IM_ARRAYSIZE(items) << '\n';
+		int i{0};
+		
+		char* names[object_count];
+		
+		for(auto& [n, o]: objects)
+		{
+			names[i] = new char[n.size() + 1];
+			strcpy(names[i], n.c_str());
+			i++;
+		}
 		
 		static int select = 1;
 		
-		//char* elem = objNamesUptr[2];
+		ImGui::SFML::Update(window, delta);
 
 		ImGui::Begin("Control Panel");
-			ImGui::Combo("##", &select, names, objects.size()); //IM_ARRAYSIZE(items));
+			ImGui::Combo("##", &select, names, object_count);
 			bool hide = ImGui::Button("Show/Hide Selected Shape");
 		ImGui::End();
 		
 		if(hide)
 			objects[ std::string(names[select]) ].setVisible();
-	}
+		
+		for(int n = 0; n < object_count; n++)
+			delete names[n];
+	}*/
 	
 	void render()
 	{
