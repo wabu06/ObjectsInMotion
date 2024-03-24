@@ -96,11 +96,18 @@ class object
 		}
 		
 		void changeVelX(float v) {
+			float old_velx = xvel;
 			xvel += v;
+			
+			xvel = xvel < 0 ? old_velx : xvel;
 		}
 		
-		void changeVelY(float v) {
+		void changeVelY(float v)
+		{
+			float old_vely = yvel;
 			yvel += v;
+			
+			yvel = yvel < 0 ? old_vely : yvel;
 		}
 		
 		void resizeToScale(sf::Vector2u oldWinSize, sf::Vector2u WinSize)
@@ -121,7 +128,7 @@ class object
 		
 		void moveObject(sf::Time& delta, unsigned int winWidth, unsigned int winHeight);
 		
-		void setColor(int R, int G, int B) {
+		void setColor(unsigned int R, unsigned int G, unsigned int B) {
 			shape.get()->setFillColor(sf::Color(R, G, B));
 		}
 		

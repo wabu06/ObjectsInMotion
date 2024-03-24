@@ -114,4 +114,8 @@ void object::moveObject(sf::Time& delta, unsigned int winWidth, unsigned int win
 	sf::Vector2f tPos = sPos + sf::Vector2f(xoff, yoff) - sf::Vector2f(0, tRect.height / 2);
 	
 	text.setPosition(tPos);
+	
+	float tTop = rect.top - (tRect.height + tRect.height / 2);
+	
+	text.setPosition(sf::Vector2f(rect.left, tTop));
 }
