@@ -15,6 +15,9 @@ class object
 {
 	std::shared_ptr<sf::Shape> shape;
 	
+	std::string o_name; // original name
+	sf::Color color; // original color
+
 	std::string name;
 	sf::Text text;
 	
@@ -22,17 +25,38 @@ class object
 	
 	bool visible;
 	
+	static object& setProperties(object& obj, std::string& name, float xpos, float ypos, float sx, float sy, int R, int G, int B)
+	{
+		obj.visible = true;
+
+		obj.o_name = obj.name = name;
+	
+		obj.color = sf::Color(R, G, B);
+		
+		obj.shape->setPosition(xpos, ypos);
+		obj.shape->setFillColor(obj.color);
+		obj.xvel = sx; obj.yvel = sy;
+		
+		return obj;
+	}
+	
 	public:
 		object() = default;
 		~object() = default;
 		
-		object(const object& obj) : shape(obj.shape), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
+		object(const object& obj)
+			:
+			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
 
-		object(const object&& obj) : shape(obj.shape), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
+		object(object&& obj)
+			:
+			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
 		
 		object& operator=(const object& obj)
 		{
 			this->shape = obj.shape;
+			this->o_name = obj.o_name;
+			this->color = obj.color;
 			this->name = obj.name;
 			this->xvel = obj.xvel;
 			this->yvel = obj.yvel;
@@ -41,9 +65,11 @@ class object
 			return *this;
 		}
 		
-		object& operator=(const object&& obj)
+		object& operator=(object&& obj)
 		{
 			this->shape = obj.shape;
+			this->o_name = obj.o_name;
+			this->color = obj.color;
 			this->name = obj.name;
 			this->xvel = obj.xvel;
 			this->yvel = obj.yvel;
@@ -66,6 +92,15 @@ class object
 			text.setString(name);
 			text.setCharacterSize(size);
 			text.setFillColor(sf::Color(R, G, B));
+		}
+		
+		void resetName() {
+			name = o_name;
+			text.setString(o_name);
+		}
+		
+		void resetColor() {
+			shape->setFillColor(color);
 		}
 		
 		std::string getName() {
@@ -117,6 +152,10 @@ class object
 		
 			shape->scale(xscale, yscale);
 		}
+		
+		void resizeObject(float s) {
+			shape->scale(s, s);
+		}
 
 		void setPosition(float xpos, float ypos) {
 			shape.get()->setPosition(xpos, ypos);
@@ -128,8 +167,12 @@ class object
 		
 		void moveObject(sf::Time& delta, unsigned int winWidth, unsigned int winHeight);
 		
+		const sf::Color& getColor() {
+			return shape->getFillColor();
+		}
+		
 		void setColor(unsigned int R, unsigned int G, unsigned int B) {
-			shape.get()->setFillColor(sf::Color(R, G, B));
+			shape->setFillColor(sf::Color(R, G, B));
 		}
 		
 		void drawObject(sf::RenderWindow& window) {

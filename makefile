@@ -7,7 +7,7 @@ SD = src/
 OBJ = objects.o ObjectsInMotion.o main.o
 INC = ${SD}objects.hpp ${SD}ObjectsInMotion.hpp
 
-imgui_INC = ${SD}imconfig-SFML.h ${SD}imgui-SFML_export.h ${imgui-SFML.h}
+imgui_INC = ${SD}imconfig-SFML.h ${SD}imgui-SFML_export.h ${SD}imgui-SFML.h
 
 build:	oim
 	
@@ -35,5 +35,5 @@ imgui-SFML.o:	${imgui_INC} ${SD}imgui-SFML.cpp
 	${CC} -c ${SD}imgui-SFML.cpp `pkg-config imgui --cflags` -I./src
 
 clean:
-	rm *.o `if [ -f oim  ]; then echo oim; fi`
+	rm *.o `if [ -f oim  ]; then rm oim; fi`
 

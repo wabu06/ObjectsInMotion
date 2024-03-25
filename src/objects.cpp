@@ -5,15 +5,19 @@ object object::createCircle(std::string name, float xpos, float ypos, float sx, 
 {
 	object obj;
 	
-	obj.visible = true;
+	//obj.visible = true;
 
-	obj.name = name;
+	//obj.o_name = obj.name = name;
+	
+	//obj.color = sf::Color(R, G, B);
 
 	obj.shape = std::make_shared<sf::CircleShape>(radius);
 
-	obj.shape.get()->setPosition(xpos, ypos);
-	obj.shape.get()->setFillColor(sf::Color(R, G, B));
-	obj.xvel = sx; obj.yvel = sy;
+	//obj.shape->setPosition(xpos, ypos);
+	//obj.shape->setFillColor(obj.color);
+	//obj.xvel = sx; obj.yvel = sy;
+	
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
 }
@@ -22,15 +26,19 @@ object object::createTriangle(std::string name, float xpos, float ypos, float sx
 {
 	object obj;
 	
-	obj.visible = true;
+	//obj.visible = true;
 
-	obj.name = name;
+	//obj.o_name = obj.name = name;
+	
+	//obj.color = sf::Color(R, G, B);
 
 	obj.shape = std::make_shared<sf::CircleShape>(radius, 3);
 
-	obj.shape.get()->setPosition(xpos, ypos);
-	obj.shape.get()->setFillColor(sf::Color(R, G, B));
-	obj.xvel = sx; obj.yvel = sy;
+	//obj.shape->setPosition(xpos, ypos);
+	//obj.shape->setFillColor(obj.color);
+	//obj.xvel = sx; obj.yvel = sy;
+	
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
 }
@@ -39,15 +47,19 @@ object object::createHexagon(std::string name, float xpos, float ypos, float sx,
 {
 	object obj;
 	
-	obj.visible = true;
+	//obj.visible = true;
 
-	obj.name = name;
+	//obj.o_name = obj.name = name;
+	
+	//obj.color = sf::Color(R, G, B);
 
 	obj.shape = std::make_shared<sf::CircleShape>(radius, 6);
 
-	obj.shape.get()->setPosition(xpos, ypos);
-	obj.shape.get()->setFillColor(sf::Color(R, G, B));
-	obj.xvel = sx; obj.yvel = sy;
+	//obj.shape->setPosition(xpos, ypos);
+	//obj.shape->setFillColor(obj.color);
+	//obj.xvel = sx; obj.yvel = sy;
+	
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
 }
@@ -56,15 +68,19 @@ object object::createRectangle(std::string name, float xpos, float ypos, float s
 {
 	object obj;
 	
-	obj.visible = true;
+	//obj.visible = true;
 
-	obj.name = name;
+	//obj.o_name = obj.name = name;
+	
+	//obj.color = sf::Color(R, G, B);
 
 	obj.shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(w, h));
 
-	obj.shape.get()->setPosition(xpos, ypos);
-	obj.shape.get()->setFillColor(sf::Color(R, G, B));
-	obj.xvel = sx; obj.yvel = sy;
+	//obj.shape->setPosition(xpos, ypos);
+	//obj.shape->setFillColor(obj.color);
+	//obj.xvel = sx; obj.yvel = sy;
+	
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
 }
