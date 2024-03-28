@@ -221,22 +221,29 @@ void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
 
 	static ImVec4 color = ImVec4(obj_color.r / 255.0f, obj_color.g / 255.0f, obj_color.b / 255.0f, 1.0f);
 	//static ImVec4 color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	//static int vec4i[4] = { 1, 5, 100, 255 };
 		
 	ImGui::SFML::Update(window, delta);
 
 	ImGui::Begin("Control Panel");
-		bool new_select = ImGui::Combo("##", &select, names, object_count);
+		bool new_select = ImGui::Combo("##names", &select, names, object_count);
 		bool hide = ImGui::Button("Show/Hide Selected Shape");
 		ImGui::Separator();
-		
-		bool xspeed_bttn_pressed = ImGui::Button("Adjust xspeed");
-		ImGui::SliderInt("X", &xspeed, -8, 8);
-		bool yspeed_bttn_pressed = ImGui::Button("Adjust yspeed");
-		ImGui::SliderInt("Y", &yspeed, -8, 8);
+
+		ImGui::SliderInt("##X", &xspeed, -8, 8);
+		ImGui::SameLine();
+		bool xspeed_bttn_pressed = ImGui::Button("Adjust Xspeed");
+		ImGui::SliderInt("##Y", &yspeed, -8, 8);
+		ImGui::SameLine();
+		bool yspeed_bttn_pressed = ImGui::Button("Adjust Yspeed");
 		ImGui::Separator();
-		
-		bool resize = ImGui::Button("Resize Object");
+
+		bool dec = ImGui::Button("-Size");
+		ImGui::SameLine();
 		ImGui::SliderInt("##resize", &scale, 1, 5);
+		ImGui::SameLine();
+		bool inc = ImGui::Button("+Size");
 		ImGui::Separator();
 			
 		//bool color_changed = ImGui::ColorEdit3("MyColor##1", (float*)&color, ImGuiColorEditFlags_DefaultOptions_);
@@ -244,6 +251,8 @@ void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
 		ImGui::Separator();
 
 		bool color_changed = ImGui::ColorPicker3("##MyColor##1", (float*)&color, flags);
+		
+		//ImGui::SliderInt3("slider int2", vec4i, 0, 255);
 	ImGui::End();
 	
 	if(xspeed_bttn_pressed)
@@ -261,8 +270,10 @@ void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
 		yspeed = 0;
 	}
 	
-	if(resize)
+	if(inc)
 		objects[ std::string(names[select]) ].resizeObject( (float) scale );
+	else if(dec)
+		objects[ std::string(names[select]) ].resizeObject( 1.0f / (float) scale );
 
 	if(reset_color) {
 		objects[ std::string(names[select]) ].resetColor();

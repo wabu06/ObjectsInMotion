@@ -99,8 +99,13 @@ class ObjectsInMotionEngine
 
 		for(auto& [n, o]: objects)
 		{
-			if( o.isVisible() )
-				o.drawObject(window);
+			//if( o.isVisible() )
+				//o.drawObject(window);
+			
+				// display is a class variable like any other, so access as you would
+				// any other class variable, and then dereference it as you would any method pointer
+				// parenthesis needed due operator precedence
+			( o.*(o.display) ) (window);
 		}
 		
 		ImGui::SFML::Render(window);

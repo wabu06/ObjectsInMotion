@@ -122,14 +122,14 @@ void object::moveObject(sf::Time& delta, unsigned int winWidth, unsigned int win
 		// calculate text position
 	sf::FloatRect tRect = text.getGlobalBounds();
 	
-	float xoff = (rect.width - tRect.width) / 2;
-	float yoff = (rect.height - tRect.height) / 2;
+	//float xoff = (rect.width - tRect.width) / 2;
+	//float yoff = (rect.height - tRect.height) / 2;
 	
-	sf::Vector2f sPos = shape->getPosition();
+	//sf::Vector2f sPos = shape->getPosition();
 	
-	sf::Vector2f tPos = sPos + sf::Vector2f(xoff, yoff) - sf::Vector2f(0, tRect.height / 2);
+	//sf::Vector2f tPos = sPos + sf::Vector2f(xoff, yoff) - sf::Vector2f(0, tRect.height / 2);
 	
-	text.setPosition(tPos);
+	//text.setPosition(tPos);
 	
 	float tTop = rect.top - (tRect.height + tRect.height / 2);
 	

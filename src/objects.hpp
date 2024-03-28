@@ -25,9 +25,13 @@ class object
 	
 	bool visible;
 	
+	float factor;
+	
 	static object& setProperties(object& obj, std::string& name, float xpos, float ypos, float sx, float sy, int R, int G, int B)
 	{
 		obj.visible = true;
+		
+		obj.display = &object::drawObject;
 
 		obj.o_name = obj.name = name;
 	
@@ -37,6 +41,8 @@ class object
 		obj.shape->setFillColor(obj.color);
 		obj.xvel = sx; obj.yvel = sy;
 		
+		obj.factor = 1.0f;
+		
 		return obj;
 	}
 	
@@ -44,13 +50,17 @@ class object
 		object() = default;
 		~object() = default;
 		
+		void (object::* display)(sf::RenderWindow&);
+		
 		object(const object& obj)
 			:
-			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
+			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
+			factor(obj.factor), display(obj.display) {}
 
 		object(object&& obj)
 			:
-			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible) {}
+			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
+			factor(obj.factor), display(obj.display) {}
 		
 		object& operator=(const object& obj)
 		{
@@ -61,6 +71,8 @@ class object
 			this->xvel = obj.xvel;
 			this->yvel = obj.yvel;
 			this->visible = obj.visible;
+			this->factor = obj.factor;
+			this->display = obj.display;
 			
 			return *this;
 		}
@@ -74,6 +86,8 @@ class object
 			this->xvel = obj.xvel;
 			this->yvel = obj.yvel;
 			this->visible = obj.visible;
+			this->factor = obj.factor;
+			this->display = obj.display;
 			
 			return *this;
 		}
@@ -114,6 +128,7 @@ class object
 		
 		bool setVisible() {
 			visible = visible ? false : true;
+			display = display == &object::drawObject ? &object::showLabel : &object::drawObject;
 			return visible;
 		}
 		
@@ -154,6 +169,7 @@ class object
 		}
 		
 		void resizeObject(float s) {
+			factor = s > 1.0 ? s : 1.0f;
 			shape->scale(s, s);
 		}
 
@@ -177,6 +193,10 @@ class object
 		
 		void drawObject(sf::RenderWindow& window) {
 			window.draw(*shape);
+			window.draw(text);
+		}
+		
+		void showLabel(sf::RenderWindow& window) {
 			window.draw(text);
 		}
 };
