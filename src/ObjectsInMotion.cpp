@@ -271,9 +271,9 @@ void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
 	}
 	
 	if(inc)
-		objects[ std::string(names[select]) ].resizeObject( (float) scale );
+		objects[ std::string(names[select]) ].resizeObject( (float) scale, sf::Vector2f(winWidth, winHeight) );
 	else if(dec)
-		objects[ std::string(names[select]) ].resizeObject( 1.0f / (float) scale );
+		objects[ std::string(names[select]) ].resizeObject( 1.0f / (float) scale, sf::Vector2f(winWidth, winHeight) );
 
 	if(reset_color) {
 		objects[ std::string(names[select]) ].resetColor();

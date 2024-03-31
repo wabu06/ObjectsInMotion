@@ -25,8 +25,6 @@ class object
 	
 	bool visible;
 	
-	float factor;
-	
 	static object& setProperties(object& obj, std::string& name, float xpos, float ypos, float sx, float sy, int R, int G, int B)
 	{
 		obj.visible = true;
@@ -41,8 +39,6 @@ class object
 		obj.shape->setFillColor(obj.color);
 		obj.xvel = sx; obj.yvel = sy;
 		
-		obj.factor = 1.0f;
-		
 		return obj;
 	}
 	
@@ -55,12 +51,12 @@ class object
 		object(const object& obj)
 			:
 			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
-			factor(obj.factor), display(obj.display) {}
+			display(obj.display) {}
 
 		object(object&& obj)
 			:
 			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
-			factor(obj.factor), display(obj.display) {}
+			display(obj.display) {}
 		
 		object& operator=(const object& obj)
 		{
@@ -71,7 +67,6 @@ class object
 			this->xvel = obj.xvel;
 			this->yvel = obj.yvel;
 			this->visible = obj.visible;
-			this->factor = obj.factor;
 			this->display = obj.display;
 			
 			return *this;
@@ -86,7 +81,6 @@ class object
 			this->xvel = obj.xvel;
 			this->yvel = obj.yvel;
 			this->visible = obj.visible;
-			this->factor = obj.factor;
 			this->display = obj.display;
 			
 			return *this;
@@ -168,9 +162,44 @@ class object
 			shape->scale(xscale, yscale);
 		}
 		
-		void resizeObject(float s) {
-			factor = s > 1.0 ? s : 1.0f;
+		void resizeObject(float s, sf::Vector2f&& winSize)
+		{
+			float winWidth = winSize.x;
+			
+			float winHeight = winSize.y;
+			
 			shape->scale(s, s);
+			
+			sf::FloatRect rect = shape->getGlobalBounds();
+			
+			bool tooBig = (rect.width >= winWidth) || (rect.height >= winHeight);
+			
+			if(tooBig) {
+				shape->scale(1.0f / s, 1.0f / s);
+				return;
+			}
+			
+			if(rect.top <= 0) // object at top of window
+				shape->setPosition(rect.left, 1);
+			
+			rect = shape->getGlobalBounds();
+			
+			if(rect.left <= 0) // object at left side of window
+				shape->setPosition(1, rect.top);
+			
+			rect = shape->getGlobalBounds();
+			
+			float right = rect.left + rect.width;
+
+			if(right >= winWidth) // object at right side of window
+				shape->setPosition(winWidth - rect.width, rect.top);
+			
+			rect = shape->getGlobalBounds();
+			
+			float bottom = rect.top + rect.height;
+
+			if(bottom >= winHeight) // object at bottom of window
+				shape->setPosition(rect.left, winHeight - rect.height);
 		}
 
 		void setPosition(float xpos, float ypos) {

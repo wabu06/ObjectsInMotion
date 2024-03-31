@@ -5,17 +5,7 @@ object object::createCircle(std::string name, float xpos, float ypos, float sx, 
 {
 	object obj;
 	
-	//obj.visible = true;
-
-	//obj.o_name = obj.name = name;
-	
-	//obj.color = sf::Color(R, G, B);
-
 	obj.shape = std::make_shared<sf::CircleShape>(radius);
-
-	//obj.shape->setPosition(xpos, ypos);
-	//obj.shape->setFillColor(obj.color);
-	//obj.xvel = sx; obj.yvel = sy;
 	
 	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
@@ -26,18 +16,8 @@ object object::createTriangle(std::string name, float xpos, float ypos, float sx
 {
 	object obj;
 	
-	//obj.visible = true;
-
-	//obj.o_name = obj.name = name;
-	
-	//obj.color = sf::Color(R, G, B);
-
 	obj.shape = std::make_shared<sf::CircleShape>(radius, 3);
 
-	//obj.shape->setPosition(xpos, ypos);
-	//obj.shape->setFillColor(obj.color);
-	//obj.xvel = sx; obj.yvel = sy;
-	
 	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
@@ -47,18 +27,8 @@ object object::createHexagon(std::string name, float xpos, float ypos, float sx,
 {
 	object obj;
 	
-	//obj.visible = true;
-
-	//obj.o_name = obj.name = name;
-	
-	//obj.color = sf::Color(R, G, B);
-
 	obj.shape = std::make_shared<sf::CircleShape>(radius, 6);
 
-	//obj.shape->setPosition(xpos, ypos);
-	//obj.shape->setFillColor(obj.color);
-	//obj.xvel = sx; obj.yvel = sy;
-	
 	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
@@ -68,18 +38,8 @@ object object::createRectangle(std::string name, float xpos, float ypos, float s
 {
 	object obj;
 	
-	//obj.visible = true;
-
-	//obj.o_name = obj.name = name;
-	
-	//obj.color = sf::Color(R, G, B);
-
 	obj.shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(w, h));
 
-	//obj.shape->setPosition(xpos, ypos);
-	//obj.shape->setFillColor(obj.color);
-	//obj.xvel = sx; obj.yvel = sy;
-	
 	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
 	return obj;
@@ -87,7 +47,7 @@ object object::createRectangle(std::string name, float xpos, float ypos, float s
 
 void object::moveObject(sf::Time& delta, unsigned int winWidth, unsigned int winHeight)
 {
-	//sf::Time delta = clock.restart();
+	//if(factor > 1.0f) std::cout << factor << '\n'; //sf::Time delta = clock.restart();
 	
 	float d30 = delta.asSeconds() * 35;
 
