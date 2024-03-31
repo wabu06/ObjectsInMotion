@@ -15,7 +15,7 @@ class object
 {
 	std::shared_ptr<sf::Shape> shape;
 	
-	std::string o_name; // original name
+	std::string alias;
 	sf::Color color; // original color
 
 	std::string name;
@@ -31,7 +31,8 @@ class object
 		
 		obj.display = &object::drawObject;
 
-		obj.o_name = obj.name = name;
+		obj.alias = "";
+		obj.name = name;
 	
 		obj.color = sf::Color(R, G, B);
 		
@@ -50,18 +51,18 @@ class object
 		
 		object(const object& obj)
 			:
-			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
+			shape(obj.shape), alias(obj.alias), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
 			display(obj.display) {}
 
 		object(object&& obj)
 			:
-			shape(obj.shape), o_name(obj.o_name), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
+			shape(obj.shape), alias(obj.alias), color(obj.color), name(obj.name), xvel(obj.xvel), yvel(obj.yvel), visible(obj.visible),
 			display(obj.display) {}
 		
 		object& operator=(const object& obj)
 		{
 			this->shape = obj.shape;
-			this->o_name = obj.o_name;
+			this->alias = obj.alias;
 			this->color = obj.color;
 			this->name = obj.name;
 			this->xvel = obj.xvel;
@@ -75,7 +76,7 @@ class object
 		object& operator=(object&& obj)
 		{
 			this->shape = obj.shape;
-			this->o_name = obj.o_name;
+			this->alias = obj.alias;
 			this->color = obj.color;
 			this->name = obj.name;
 			this->xvel = obj.xvel;
@@ -102,11 +103,6 @@ class object
 			text.setFillColor(sf::Color(R, G, B));
 		}
 		
-		void resetName() {
-			name = o_name;
-			text.setString(o_name);
-		}
-		
 		void resetColor() {
 			shape->setFillColor(color);
 		}
@@ -117,6 +113,15 @@ class object
 		
 		void setName(std::string n) {
 			name = n;
+			text.setString(name);
+		}
+		
+		void setAlias(std::string&& a) {
+			alias = a;
+			text.setString(name + " - " + alias);
+		}
+		
+		void clearAlias() {
 			text.setString(name);
 		}
 		
@@ -192,7 +197,7 @@ class object
 			float right = rect.left + rect.width;
 
 			if(right >= winWidth) // object at right side of window
-				shape->setPosition(winWidth - rect.width, rect.top);
+				shape->setPosition(winWidth - rect.width - 3.0f, rect.top);
 			
 			rect = shape->getGlobalBounds();
 			

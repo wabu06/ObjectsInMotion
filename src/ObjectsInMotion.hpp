@@ -40,8 +40,6 @@ class ObjectsInMotionEngine
 	
 	void processInputs();
 	
-	//void processImguiEvents() {}
-	
 	void (ObjectsInMotionEngine::*updatePtr) (sf::Time&);
 	
 	void resizeUpdate(sf::Time& delta)
@@ -61,53 +59,17 @@ class ObjectsInMotionEngine
 	}
 	
 	void handleImgui(sf::Time& delta);
-	/*{
-		//char** names = objNamesUptr.get();
-		
-		auto object_count = objects.size();
-		
-		int i{0};
-		
-		char* names[object_count];
-		
-		for(auto& [n, o]: objects)
-		{
-			names[i] = new char[n.size() + 1];
-			strcpy(names[i], n.c_str());
-			i++;
-		}
-		
-		static int select = 1;
-		
-		ImGui::SFML::Update(window, delta);
-
-		ImGui::Begin("Control Panel");
-			ImGui::Combo("##", &select, names, object_count);
-			bool hide = ImGui::Button("Show/Hide Selected Shape");
-		ImGui::End();
-		
-		if(hide)
-			objects[ std::string(names[select]) ].setVisible();
-		
-		for(int n = 0; n < object_count; n++)
-			delete names[n];
-	}*/
 	
 	void render()
 	{
 		window.clear(sf::Color::Black);
 
 		for(auto& [n, o]: objects)
-		{
-			//if( o.isVisible() )
-				//o.drawObject(window);
-			
 				// display is a class variable like any other, so access as you would
 				// any other class variable, and then dereference it as you would any method pointer
 				// parenthesis needed due operator precedence
 			( o.*(o.display) ) (window);
-		}
-		
+
 		ImGui::SFML::Render(window);
 		
 		window.display();
@@ -128,7 +90,6 @@ class ObjectsInMotionEngine
 			while (!done)
 			{
 				processInputs();
-				//processImguiEvents();
 				
 				delta = clock.restart();
 				

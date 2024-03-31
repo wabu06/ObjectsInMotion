@@ -223,12 +223,19 @@ void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
 	//static ImVec4 color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	//static int vec4i[4] = { 1, 5, 100, 255 };
+	
+	static char alias[50] = "";
 		
 	ImGui::SFML::Update(window, delta);
 
+	ImGui::SetWindowSize( ImVec2(450, 600) );
 	ImGui::Begin("Control Panel");
 		bool new_select = ImGui::Combo("##names", &select, names, object_count);
 		bool hide = ImGui::Button("Show/Hide Selected Shape");
+		ImGui::Separator();
+		
+		ImGui::Text("Enter An Alias For Selected Shape:");
+		bool text = ImGui::InputText("##alias", alias, IM_ARRAYSIZE(alias), ImGuiInputTextFlags_EnterReturnsTrue);
 		ImGui::Separator();
 
 		ImGui::SliderInt("##X", &xspeed, -8, 8);
@@ -269,6 +276,9 @@ void ObjectsInMotionEngine::handleImgui(sf::Time& delta)
 		xspeed = 0;
 		yspeed = 0;
 	}
+	
+	if(text)
+		objects[ std::string(names[select]) ].setAlias( std::string(alias) );
 	
 	if(inc)
 		objects[ std::string(names[select]) ].resizeObject( (float) scale, sf::Vector2f(winWidth, winHeight) );
