@@ -1,44 +1,48 @@
 #include "objects.hpp"
 
 
-void object::resizeObject(float s, sf::Vector2f&& winSize)
+object object::createCircle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius)
 {
-	float winWidth = winSize.x;
-			
-	float winHeight = winSize.y;
-			
-	shape->scale(s, s);
-			
-	sf::FloatRect rect = shape->getGlobalBounds();
-			
-	bool tooBig = (rect.width >= winWidth) || (rect.height >= winHeight);
-			
-	if(tooBig) {
-		shape->scale(1.0f / s, 1.0f / s);
-		return;
-	}
-			
-	if(rect.top <= 0) // object at top of window
-		shape->setPosition(rect.left, 1);
-			
-	rect = shape->getGlobalBounds();
-			
-	if(rect.left <= 0) // object at left side of window
-		shape->setPosition(1, rect.top);
-			
-	rect = shape->getGlobalBounds();
-			
-	float right = rect.left + rect.width;
+	object obj;
+	
+	obj.shape = std::make_shared<sf::CircleShape>(radius);
+	
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
 
-	if(right >= winWidth) // object at right side of window
-		shape->setPosition(winWidth - rect.width - 3.0f, rect.top);
-			
-	rect = shape->getGlobalBounds();
-			
-	float bottom = rect.top + rect.height;
+	return obj;
+}
 
-	if(bottom >= winHeight) // object at bottom of window
-		shape->setPosition(rect.left, winHeight - rect.height);
+object object::createTriangle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius)
+{
+	object obj;
+	
+	obj.shape = std::make_shared<sf::CircleShape>(radius, 3);
+
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
+
+	return obj;
+}
+
+object object::createHexagon(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius)
+{
+	object obj;
+	
+	obj.shape = std::make_shared<sf::CircleShape>(radius, 6);
+
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
+
+	return obj;
+}
+
+object object::createRectangle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float w, float h)
+{
+	object obj;
+	
+	obj.shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(w, h));
+
+	obj = setProperties(obj, name, xpos, ypos, sx, sy, R, G, B);
+
+	return obj;
 }
 
 void object::moveObject(sf::Time& delta, unsigned int winWidth, unsigned int winHeight)

@@ -17,7 +17,7 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 		return;
 	}
 	
-	std::unordered_set<std::string> shapes = {"Hexagon", "Triangle", "Circle", "Rectangle"};
+	//std::vector<std::string> objNames;
 			
 	std::string setting;
 			
@@ -34,60 +34,72 @@ ObjectsInMotionEngine::ObjectsInMotionEngine(std::string config_file)
 			return;
 		}
 		
-		if(shapes.count(setting) > 0)
+		if(setting == "Hexagon")
 		{
 			std::string name;
 	
 			float xpos, ypos;
 			float sx, sy; // speed
 			int R, G, B; // color
+			float radius;
 			
-			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B;
+			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
 			
-			object::Creator creator;
+			//objNames.push_back(name);
 			
-			creator.setName(name)
-				   .setPosition(xpos, ypos)
-				   .setVelocity(sx, sy)
-				   .setColor( sf::Color(R, G, B) )
-				   .finalize();
-		
-			if(setting == "Hexagon")
-			{
-				float length;
+			objects[name] = object::createHexagon(name, xpos, ypos, sx, sy, R, G, B, radius);
+		}
+		else if(setting == "Triangle")
+		{
+			std::string name;
+	
+			float xpos, ypos;
+			float sx, sy; // speed
+			int R, G, B; // color
+			float radius;
 			
-				fin >> length;
-				
-				objects[name] = creator.createHexagon(length);
-					//objects[name] = object::createHexagon(name, xpos, ypos, sx, sy, R, G, B, length);
-			}
-			else if(setting == "Triangle")
-			{
-				float length;
+			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
 			
-				fin >> length;
-				
-				objects[name] = creator.createTriangle(length);
-					//objects[name] = object::createTriangle(name, xpos, ypos, sx, sy, R, G, B, length);
-			}
-			else if(setting == "Circle")
-			{
-				float radius;
+			//objNames.push_back(name);
 			
-				fin >> radius;
-				
-				objects[name] = creator.createCircle(radius);
-					//objects[name] = object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius);
-			}
-			else if(setting == "Rectangle")
-			{
-				float w, h;
+			objects[name] = object::createTriangle(name, xpos, ypos, sx, sy, R, G, B, radius);
+		}
+		else if(setting == "Circle")
+		{
+			std::string name;
+	
+			float xpos, ypos;
+			float sx, sy; // speed
+			int R, G, B; // color
+			float radius;
 			
-				fin >> w >> h;
+			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> radius;
 			
-				objects[name] = creator.createRectangle(w, h);
-					//objects[name] = object::createRectangle(name, xpos, ypos, sx, sy, R, G, B, w, h);
-			}
+			//objNames.push_back(name);
+			
+			objects[name] = object::createCircle(name, xpos, ypos, sx, sy, R, G, B, radius);
+		}
+		else if(setting == "Rectangle")
+		{
+			std::string name;
+	
+			float xpos, ypos;
+			float sx, sy; // speed
+			int R, G, B; // color
+			float w, h;
+			
+			fin >> name >> xpos >> ypos >> sx >> sy >> R >> G >> B >> w >> h;
+			
+			object ob = object::Creator().setName(name)
+										 .setPosition(xpos, ypos)
+										 .setVelocity(sx, sy)
+										 .setColor( sf::Color(R, G, B) )
+										 .finalize()
+										 .createRectangle(w,h);
+			
+			//objNames.push_back(name);
+			
+			objects[name] = object::createRectangle(name, xpos, ypos, sx, sy, R, G, B, w, h);
 		}
 		else if(setting == "Window")
 			fin >> winWidth >> winHeight;

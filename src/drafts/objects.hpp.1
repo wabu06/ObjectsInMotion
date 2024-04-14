@@ -25,6 +25,24 @@ class object
 	
 	bool visible;
 	
+	static object& setProperties(object& obj, std::string& name, float xpos, float ypos, float sx, float sy, int R, int G, int B)
+	{
+		obj.visible = true;
+		
+		obj.display = &object::drawObject;
+
+		obj.alias = "";
+		obj.name = name;
+	
+		obj.color = sf::Color(R, G, B);
+		
+		obj.shape->setPosition(xpos, ypos);
+		obj.shape->setFillColor(obj.color);
+		obj.xvel = sx; obj.yvel = sy;
+		
+		return obj;
+	}
+	
 	public:
 		object() = default;
 		~object() = default;
@@ -72,6 +90,14 @@ class object
 			
 			return *this;
 		}
+		
+		static object createCircle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius);
+		
+		static object createTriangle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius);
+		
+		static object createHexagon(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float radius);
+		
+		static object createRectangle(std::string name, float xpos, float ypos, float sx, float sy, int R, int G, int B, float w, float h);
 		
 		void setLabel(sf::Font& font, unsigned int size, uint8_t R, uint8_t G, uint8_t B)
 		{	
@@ -146,7 +172,45 @@ class object
 			shape->scale(xscale, yscale);
 		}
 		
-		void resizeObject(float s, sf::Vector2f&& winSize);
+		void resizeObject(float s, sf::Vector2f&& winSize)
+		{
+			float winWidth = winSize.x;
+			
+			float winHeight = winSize.y;
+			
+			shape->scale(s, s);
+			
+			sf::FloatRect rect = shape->getGlobalBounds();
+			
+			bool tooBig = (rect.width >= winWidth) || (rect.height >= winHeight);
+			
+			if(tooBig) {
+				shape->scale(1.0f / s, 1.0f / s);
+				return;
+			}
+			
+			if(rect.top <= 0) // object at top of window
+				shape->setPosition(rect.left, 1);
+			
+			rect = shape->getGlobalBounds();
+			
+			if(rect.left <= 0) // object at left side of window
+				shape->setPosition(1, rect.top);
+			
+			rect = shape->getGlobalBounds();
+			
+			float right = rect.left + rect.width;
+
+			if(right >= winWidth) // object at right side of window
+				shape->setPosition(winWidth - rect.width - 3.0f, rect.top);
+			
+			rect = shape->getGlobalBounds();
+			
+			float bottom = rect.top + rect.height;
+
+			if(bottom >= winHeight) // object at bottom of window
+				shape->setPosition(rect.left, winHeight - rect.height);
+		}
 
 		void setPosition(float xpos, float ypos) {
 			shape.get()->setPosition(xpos, ypos);
@@ -176,6 +240,8 @@ class object
 		}
 		
 		class Creator;
+
+		//class Rectangle;
 };
 
 class object::Creator
@@ -299,3 +365,19 @@ class object::Creator
 		}
 };
 
+/*class object::Rectangle: public object::Creator
+{
+	public:
+		Rectangle() = default;
+		virtual ~Rectangle() = default;
+		
+		object create(float w = 1.0f, float h = 1.0f) override
+		{
+			obj.shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(w, h));
+
+			obj.shape->setPosition(xpos, ypos);
+			obj.shape->setFillColor(color);
+			
+			return obj;
+		}
+};*/
